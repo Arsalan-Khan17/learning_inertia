@@ -1,6 +1,7 @@
 <template>
     <div>
         <Component
+
             :is="link.url ? Link : 'span'"
             v-for="link in links"
             :href="link.url"

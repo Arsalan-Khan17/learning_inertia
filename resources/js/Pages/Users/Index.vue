@@ -2,7 +2,14 @@
     <Head>
         <title>Users</title>
     </Head>
-        <h1 class="text-3xl">Users</h1>
+
+    <div class="flex justify-between mb-6">
+        <div class="flex items-center">
+            <h1 class="text-3xl">Users</h1>
+            <Link href="/users/create" class="text-blue-500 text-lg ml-3">New User</Link>
+        </div>
+        <input v-model="search" type="text" placeholder="Search...." class="border px-2 rounded-lg">
+    </div>
 
 
     <div class="max-w-3xl mt-3">
@@ -29,11 +36,21 @@
 </template>
 
 <script setup>
-import Pagination from './Shared/Pagination.vue'
-import {Link} from "@inertiajs/inertia-vue3";
+
+import Pagination from '../Shared/Pagination.vue'
+import {Link, usePage} from "@inertiajs/inertia-vue3";
+import {ref, watch} from "vue";
+import {Inertia} from "@inertiajs/inertia";
+import debounce from "lodash/debounce";
 defineProps({
-    users : Object
+    users : Object,
+    filter:Object
 })
+
+let search = ref( usePage().props.value.filters.search);
+watch(search,debounce(function(value){
+    Inertia.get('/users',{search:value},{preserveState:true,replace:true});
+},300));
 </script>
 <style scoped>
 
